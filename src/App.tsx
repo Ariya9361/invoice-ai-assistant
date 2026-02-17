@@ -13,6 +13,9 @@ import ReviewApproval from "@/pages/ReviewApproval";
 import ERPIntegration from "@/pages/ERPIntegration";
 import Analytics from "@/pages/Analytics";
 import AIWorkflow from "@/pages/AIWorkflow";
+import Submissions from "@/pages/Submissions";
+import ReviewCenter from "@/pages/ReviewCenter";
+import AdminPanel from "@/pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
@@ -35,12 +38,15 @@ function AppRoutes() {
     <AppLayout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/submissions" element={<Submissions />} />
         <Route path="/invoices" element={<InvoiceProcessing />} />
         <Route path="/matching" element={<ThreeWayMatch />} />
+        <Route path="/review-center" element={<ReviewCenter />} />
         <Route path="/review" element={<ReviewApproval />} />
         <Route path="/erp" element={<ERPIntegration />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/workflow" element={<AIWorkflow />} />
+        <Route path="/admin" element={<AdminPanel />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AppLayout>

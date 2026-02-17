@@ -12,24 +12,38 @@ import {
   ChevronRight,
   LogOut,
   Zap,
+  Upload,
+  ClipboardCheck,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useUserRole } from "@/hooks/useUserRole";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/submissions", label: "Submissions", icon: Upload },
   { path: "/invoices", label: "Invoice Processing", icon: FileText },
   { path: "/matching", label: "Three-Way Match", icon: GitCompareArrows },
+  { path: "/review-center", label: "Review Center", icon: ClipboardCheck, requireReviewer: true },
   { path: "/review", label: "Review & Approval", icon: CheckSquare },
   { path: "/erp", label: "ERP Integration", icon: Database },
   { path: "/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/workflow", label: "AI Workflow", icon: Workflow },
+  { path: "/admin", label: "Admin Panel", icon: Shield, requireAdmin: true },
 ];
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { isAdmin, isReviewer } = useUserRole();
+
+  const visibleItems = navItems.filter((item) => {
+    if ('requireAdmin' in item && item.requireAdmin && !isAdmin) return false;
+    if ('requireReviewer' in item && item.requireReviewer && !isReviewer) return false;
+    return true;
+  });
 
   return (
     <aside
@@ -53,7 +67,7 @@ export function AppSidebar() {
 
       {/* Nav */}
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-        {navItems.map((item) => (
+        {visibleItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
