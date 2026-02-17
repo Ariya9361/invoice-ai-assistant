@@ -14,6 +14,7 @@ import ERPIntegration from "@/pages/ERPIntegration";
 import Analytics from "@/pages/Analytics";
 import AIWorkflow from "@/pages/AIWorkflow";
 import NotFound from "./pages/NotFound";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 const queryClient = new QueryClient();
 
@@ -48,13 +49,15 @@ function AppRoutes() {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </TooltipProvider>
+    <CurrencyProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </TooltipProvider>
+    </CurrencyProvider>
   </QueryClientProvider>
 );
 

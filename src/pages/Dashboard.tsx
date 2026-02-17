@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, CheckCircle, AlertTriangle, Clock, TrendingUp, TrendingDown } from "lucide-react";
 import { dashboardKPIs, statusBreakdown, monthlyTrend, recentActivity } from "@/lib/mock-data";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend } from "recharts";
+import { CurrencySelector } from "@/components/CurrencySelector";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const kpiCards = [
   { label: "Total Processed", value: dashboardKPIs.totalProcessed, change: dashboardKPIs.totalProcessedChange, icon: FileText, suffix: "" },
@@ -19,11 +21,21 @@ const activityIcons: Record<string, string> = {
 };
 
 export default function Dashboard() {
+  const { format } = useCurrency();
+
+  const trendData = monthlyTrend.map((m) => ({
+    ...m,
+    value: m.value,
+  }));
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">AI-powered invoice processing overview</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">AI-powered invoice processing overview</p>
+        </div>
+        <CurrencySelector />
       </div>
 
       {/* KPI Cards */}
