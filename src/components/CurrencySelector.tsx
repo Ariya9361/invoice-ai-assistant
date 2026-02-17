@@ -15,7 +15,7 @@ export function CurrencySelector() {
           if (found) setCurrency(found);
         }}
       >
-        <SelectTrigger className="w-[140px] h-8 text-xs bg-card border-border">
+        <SelectTrigger className="w-[140px] h-8 text-xs bg-card border-border text-foreground">
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="max-h-[300px]">
