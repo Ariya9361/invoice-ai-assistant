@@ -3,17 +3,15 @@ import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
-  GitCompareArrows,
-  CheckSquare,
-  Database,
+  ClipboardCheck,
+  Building2,
+  History,
   BarChart3,
   Workflow,
   ChevronLeft,
   ChevronRight,
   LogOut,
   Zap,
-  Upload,
-  ClipboardCheck,
   Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,12 +21,10 @@ import { useUserRole } from "@/hooks/useUserRole";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
-  { path: "/submissions", label: "Submissions", icon: Upload },
   { path: "/invoices", label: "Invoice Processing", icon: FileText },
-  { path: "/matching", label: "Three-Way Match", icon: GitCompareArrows },
   { path: "/review-center", label: "Review Center", icon: ClipboardCheck, requireReviewer: true },
-  { path: "/review", label: "Review & Approval", icon: CheckSquare },
-  { path: "/erp", label: "ERP Integration", icon: Database },
+  { path: "/vendors", label: "Vendors", icon: Building2 },
+  { path: "/audit", label: "Audit Trail", icon: History, requireReviewer: true },
   { path: "/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/workflow", label: "AI Workflow", icon: Workflow },
   { path: "/admin", label: "Admin Panel", icon: Shield, requireAdmin: true },
@@ -59,8 +55,8 @@ export function AppSidebar() {
         </div>
         {!collapsed && (
           <div className="flex flex-col">
-            <span className="text-sm font-bold text-sidebar-accent-foreground">SupplyChain</span>
-            <span className="text-[10px] font-medium text-primary">AI Agent</span>
+            <span className="text-sm font-bold text-sidebar-accent-foreground">ProcureAI</span>
+            <span className="text-[10px] font-medium text-primary">Enterprise</span>
           </div>
         )}
       </div>
