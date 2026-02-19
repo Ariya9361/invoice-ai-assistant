@@ -14,6 +14,125 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_trail: {
+        Row: {
+          action: string
+          details: Json | null
+          entity_id: string
+          entity_type: string
+          id: string
+          performed_at: string
+          performed_by: string
+        }
+        Insert: {
+          action: string
+          details?: Json | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          performed_at?: string
+          performed_by: string
+        }
+        Update: {
+          action?: string
+          details?: Json | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          performed_at?: string
+          performed_by?: string
+        }
+        Relationships: []
+      }
+      invoices: {
+        Row: {
+          amount: number | null
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          currency: string | null
+          description: string | null
+          due_date: string | null
+          file_name: string | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          invoice_number: string | null
+          paid_at: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          reviewer_notes: string | null
+          risk_reason: string | null
+          risk_score: Database["public"]["Enums"]["vendor_risk"] | null
+          risk_score_value: number | null
+          status: Database["public"]["Enums"]["invoice_status"]
+          title: string
+          updated_at: string
+          user_id: string
+          vendor_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          due_date?: string | null
+          file_name?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          invoice_number?: string | null
+          paid_at?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          risk_reason?: string | null
+          risk_score?: Database["public"]["Enums"]["vendor_risk"] | null
+          risk_score_value?: number | null
+          status?: Database["public"]["Enums"]["invoice_status"]
+          title: string
+          updated_at?: string
+          user_id: string
+          vendor_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          currency?: string | null
+          description?: string | null
+          due_date?: string | null
+          file_name?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          invoice_number?: string | null
+          paid_at?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          risk_reason?: string | null
+          risk_score?: Database["public"]["Enums"]["vendor_risk"] | null
+          risk_score_value?: number | null
+          status?: Database["public"]["Enums"]["invoice_status"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string
@@ -148,6 +267,51 @@ export type Database = {
         }
         Relationships: []
       }
+      vendors: {
+        Row: {
+          address: string | null
+          created_at: string
+          created_by: string
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          risk_status: Database["public"]["Enums"]["vendor_risk"]
+          tax_id: string | null
+          total_spend: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          created_by: string
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          risk_status?: Database["public"]["Enums"]["vendor_risk"]
+          tax_id?: string | null
+          total_spend?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          created_by?: string
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          risk_status?: Database["public"]["Enums"]["vendor_risk"]
+          tax_id?: string | null
+          total_spend?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -163,7 +327,14 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "reviewer" | "user"
+      invoice_status:
+        | "uploaded"
+        | "under_review"
+        | "approved"
+        | "rejected"
+        | "paid"
       submission_status: "pending" | "in_review" | "approved" | "rejected"
+      vendor_risk: "low" | "medium" | "high"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -292,7 +463,15 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "reviewer", "user"],
+      invoice_status: [
+        "uploaded",
+        "under_review",
+        "approved",
+        "rejected",
+        "paid",
+      ],
       submission_status: ["pending", "in_review", "approved", "rejected"],
+      vendor_risk: ["low", "medium", "high"],
     },
   },
 } as const

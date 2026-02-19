@@ -8,13 +8,11 @@ import { AppLayout } from "@/components/AppLayout";
 import AuthPage from "@/pages/Auth";
 import Dashboard from "@/pages/Dashboard";
 import InvoiceProcessing from "@/pages/InvoiceProcessing";
-import ThreeWayMatch from "@/pages/ThreeWayMatch";
-import ReviewApproval from "@/pages/ReviewApproval";
-import ERPIntegration from "@/pages/ERPIntegration";
+import ReviewCenter from "@/pages/ReviewCenter";
+import VendorManagement from "@/pages/VendorManagement";
+import AuditTrail from "@/pages/AuditTrail";
 import Analytics from "@/pages/Analytics";
 import AIWorkflow from "@/pages/AIWorkflow";
-import Submissions from "@/pages/Submissions";
-import ReviewCenter from "@/pages/ReviewCenter";
 import AdminPanel from "@/pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
@@ -38,12 +36,10 @@ function AppRoutes() {
     <AppLayout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/submissions" element={<Submissions />} />
         <Route path="/invoices" element={<InvoiceProcessing />} />
-        <Route path="/matching" element={<ThreeWayMatch />} />
         <Route path="/review-center" element={<ReviewCenter />} />
-        <Route path="/review" element={<ReviewApproval />} />
-        <Route path="/erp" element={<ERPIntegration />} />
+        <Route path="/vendors" element={<VendorManagement />} />
+        <Route path="/audit" element={<AuditTrail />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/workflow" element={<AIWorkflow />} />
         <Route path="/admin" element={<AdminPanel />} />

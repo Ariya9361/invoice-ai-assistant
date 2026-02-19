@@ -3,10 +3,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useUserRole } from "@/hooks/useUserRole";
-import { useSubmissions } from "@/hooks/useSubmissions";
+import { useInvoices } from "@/hooks/useInvoices";
+import { useVendors } from "@/hooks/useVendors";
+import { useAuditTrail } from "@/hooks/useAuditTrail";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Users, FileText, ShieldCheck, Activity } from "lucide-react";
+import { Users, FileText, ShieldCheck, Activity, Building2, History } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface UserWithRole {
@@ -17,7 +19,9 @@ interface UserWithRole {
 
 export default function AdminPanel() {
   const { isAdmin } = useUserRole();
-  const { submissions } = useSubmissions();
+  const { invoices } = useInvoices();
+  const { vendors } = useVendors();
+  const { entries: auditEntries } = useAuditTrail();
   const [users, setUsers] = useState<UserWithRole[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +44,6 @@ export default function AdminPanel() {
 
   const updateRole = async (userId: string, newRole: string) => {
     try {
-      // Delete existing role then insert new one
       await supabase.from("user_roles").delete().eq("user_id", userId);
       const { error } = await supabase.from("user_roles").insert({ user_id: userId, role: newRole as any });
       if (error) throw error;
@@ -59,11 +62,15 @@ export default function AdminPanel() {
     );
   }
 
+  const roleLabels: Record<string, string> = { user: "Accountant", reviewer: "Manager", admin: "Admin" };
+
   const stats = [
     { label: "Total Users", value: users.length, icon: Users },
-    { label: "Total Submissions", value: submissions.length, icon: FileText },
-    { label: "Pending Review", value: submissions.filter((s) => s.status === "pending").length, icon: Activity },
-    { label: "Approved", value: submissions.filter((s) => s.status === "approved").length, icon: ShieldCheck },
+    { label: "Total Invoices", value: invoices.length, icon: FileText },
+    { label: "Total Vendors", value: vendors.length, icon: Building2 },
+    { label: "Pending Review", value: invoices.filter((i) => i.status === "uploaded" || i.status === "under_review").length, icon: Activity },
+    { label: "Approved", value: invoices.filter((i) => i.status === "approved").length, icon: ShieldCheck },
+    { label: "Audit Events", value: auditEntries.length, icon: History },
   ];
 
   return (
@@ -74,7 +81,7 @@ export default function AdminPanel() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((s) => (
           <Card key={s.label} className="bg-card border-border">
             <CardContent className="p-5">
@@ -96,6 +103,7 @@ export default function AdminPanel() {
       <Card className="bg-card border-border">
         <CardHeader>
           <CardTitle className="text-base">User Management</CardTitle>
+          <p className="text-xs text-muted-foreground">Roles: Accountant (User) → Manager (Reviewer) → Admin</p>
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
@@ -117,16 +125,14 @@ export default function AdminPanel() {
                     <tr key={u.user_id} className="border-b border-border hover:bg-secondary/50 transition-colors">
                       <td className="py-3 px-4 font-medium text-foreground">{u.display_name || "Unknown"}</td>
                       <td className="py-3 px-4 text-center">
-                        <Badge variant="outline" className="text-xs">{u.role}</Badge>
+                        <Badge variant="outline" className="text-xs">{roleLabels[u.role] || u.role}</Badge>
                       </td>
                       <td className="py-3 px-4 text-center">
                         <Select value={u.role} onValueChange={(v) => updateRole(u.user_id, v)}>
-                          <SelectTrigger className="w-32 mx-auto">
-                            <SelectValue />
-                          </SelectTrigger>
+                          <SelectTrigger className="w-36 mx-auto"><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="user">User</SelectItem>
-                            <SelectItem value="reviewer">Reviewer</SelectItem>
+                            <SelectItem value="user">Accountant</SelectItem>
+                            <SelectItem value="reviewer">Manager</SelectItem>
                             <SelectItem value="admin">Admin</SelectItem>
                           </SelectContent>
                         </Select>
